@@ -1,0 +1,31 @@
+#!/usr/bin/expect
+
+set admin_user_name [lindex $argv 0]
+set old_pw [lindex $argv 1]
+set new_pw [lindex $argv 2]
+set timeout 15
+
+spawn env LANG=C /home/glassfish/glassfish4/glassfish/bin/asadmin change-admin-password
+expect "Enter admin user name \[default: admin\]>"
+send "${admin_user_name}\n"
+expect "Enter the admin password>"
+send "${old_pw}\n"
+expect "Enter the new admin password>"
+send "${new_pw}\n"
+expect "Enter the new admin password again>"
+send "${new_pw}\n"
+expect "Command change-admin-password executed successfully."
+
+spawn env LANG=C /home/glassfish/glassfish4/glassfish/bin/asadmin enable-secure-admin
+expect "Enter admin user name>"
+send "${admin_user_name}\n"
+expect "Enter admin password for user \"admin\">"
+send "${new_pw}\n"
+expect "Command enable-secure-admin executed successfully."
+
+spawn env LANG=C /home/glassfish/glassfish4/glassfish/bin/asadmin stop-domain 
+expect "Command stop-domain executed successfully."
+
+spawn env LANG=C /home/glassfish/glassfish4/glassfish/bin/asadmin start-domain 
+expect "Command start-domain executed successfully."
+exit 0
