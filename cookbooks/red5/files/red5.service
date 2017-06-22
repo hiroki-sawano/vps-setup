@@ -1,0 +1,12 @@
+[Unit]
+Description = Red5 Server v1.0.5
+After = syslog.target network.target
+
+[Service]
+User=red5
+ExecStart = /bin/sh red5.sh 
+ExecStop = /bin/sh red5-shutdown.sh
+Type = forking
+
+[Install]
+WantedBy = multi-user.target
